@@ -1,4 +1,4 @@
-package com.tpkhanh.chatappapi.dto.request;
+package com.tpkhanh.chatappapi.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountCreationRequest {
+public class AccountResponse {
+    Integer id_account;
     String account;
     String password;
     LocalDateTime date_time_create;

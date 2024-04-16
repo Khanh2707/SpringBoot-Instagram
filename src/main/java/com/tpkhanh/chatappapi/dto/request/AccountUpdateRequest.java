@@ -1,26 +1,18 @@
 package com.tpkhanh.chatappapi.dto.request;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountUpdateRequest {
-    private String password;
-    private LocalDateTime date_time_create;
-    private Boolean state_active;
-    private LocalDateTime last_time_active;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public LocalDateTime getDate_time_create() {
-        return date_time_create;
-    }
-
-    public Boolean getState_active() {
-        return state_active;
-    }
-
-    public LocalDateTime getLast_time_active() {
-        return last_time_active;
-    }
+    String password;
+    LocalDateTime date_time_create;
+    Boolean state_active;
+    LocalDateTime last_time_active;
 }

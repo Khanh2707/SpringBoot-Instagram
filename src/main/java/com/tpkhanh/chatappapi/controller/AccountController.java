@@ -3,19 +3,23 @@ package com.tpkhanh.chatappapi.controller;
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.request.ApiResponse;
+import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+    AccountService accountService;
 
     @GetMapping("")
     List<Account> getAllAccounts() {
@@ -23,7 +27,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    Account getAccount(@PathVariable Integer accountId) {
+    AccountResponse getAccount(@PathVariable Integer accountId) {
         return accountService.getAccountById(accountId);
     }
 
@@ -37,7 +41,7 @@ public class AccountController {
     }
 
     @PutMapping("/{accountId}")
-    Account updateAccount(@PathVariable Integer accountId, @RequestBody AccountUpdateRequest request) {
+    AccountResponse updateAccount(@PathVariable Integer accountId, @RequestBody AccountUpdateRequest request) {
         return accountService.updateAccount(accountId, request);
     }
 
