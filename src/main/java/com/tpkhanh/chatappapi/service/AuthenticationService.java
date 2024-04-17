@@ -11,6 +11,7 @@ import com.tpkhanh.chatappapi.dto.response.AuthenticationResponse;
 import com.tpkhanh.chatappapi.dto.response.IntrospectResponse;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
+import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +68,7 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        var token = generateToken(request.getAccount());
+        var token = generateToken(account);
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -73,17 +76,17 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String account) {
+    private String generateToken(Account account) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(account)
+                .subject(account.getAccount())
                 .issuer("https://chatappapi.tpkhanh.com/")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("customClaim", "Custom")
+                .claim("scope", buildScope(account))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -96,5 +99,13 @@ public class AuthenticationService {
         } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String buildScope(Account account) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(account.getRoles()))
+            account.getRoles().forEach(stringJoiner::add);
+
+        return stringJoiner.toString();
     }
 }
