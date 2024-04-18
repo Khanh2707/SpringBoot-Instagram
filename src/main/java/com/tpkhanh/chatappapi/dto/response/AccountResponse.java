@@ -1,5 +1,6 @@
 package com.tpkhanh.chatappapi.dto.response;
 
+import com.tpkhanh.chatappapi.model.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,5 +18,5 @@ public class AccountResponse {
     LocalDateTime date_time_create;
     Boolean state_active;
     LocalDateTime last_time_active;
-    Set<String> roles;
+    Set<Role> roles;
 }

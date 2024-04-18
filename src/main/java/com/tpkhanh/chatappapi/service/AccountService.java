@@ -71,7 +71,7 @@ public class AccountService {
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 
-        account.setRoles(roles);
+//        account.setRoles(roles);
 
         return accountMapper.toAccountResponse(accountRepository.save(account));
     }

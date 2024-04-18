@@ -14,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "account")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +23,7 @@ public class Account {
     LocalDateTime date_time_create;
     Boolean state_active;
     LocalDateTime last_time_active;
-    Set<String> roles;
+
+    @ManyToMany
+    Set<Role> roles;
 }

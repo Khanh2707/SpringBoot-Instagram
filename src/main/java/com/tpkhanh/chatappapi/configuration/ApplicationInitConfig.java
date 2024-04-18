@@ -36,7 +36,7 @@ public class ApplicationInitConfig {
                         .date_time_create(LocalDateTime.now())
                         .state_active(false)
                         .last_time_active(LocalDateTime.now())
-                        .roles(roles)
+//                        .roles(roles)
                         .build();
 
                 accountRepository.save(account);
