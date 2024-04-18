@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,4 +16,5 @@ public class AccountUpdateRequest {
     LocalDateTime date_time_create;
     Boolean state_active;
     LocalDateTime last_time_active;
+    List<String> roles;
 }

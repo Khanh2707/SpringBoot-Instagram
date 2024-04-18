@@ -18,5 +18,5 @@ public class AccountResponse {
     LocalDateTime date_time_create;
     Boolean state_active;
     LocalDateTime last_time_active;
-    Set<Role> roles;
+    Set<RoleResponse> roles;
 }

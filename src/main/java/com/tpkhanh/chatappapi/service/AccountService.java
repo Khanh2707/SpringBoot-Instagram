@@ -9,6 +9,7 @@ import com.tpkhanh.chatappapi.exception.ErrorCode;
 import com.tpkhanh.chatappapi.mapper.AccountMapper;
 import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
+import com.tpkhanh.chatappapi.repository.RoleRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,6 +36,8 @@ public class AccountService {
     AccountMapper accountMapper;
 
     PasswordEncoder passwordEncoder;
+
+    RoleRepository roleRepository;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public List<AccountResponse> getAllAccounts() {
@@ -81,6 +84,11 @@ public class AccountService {
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
 
         accountMapper.updateAccount(account, request);
+
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        account.setRoles(new HashSet<>(roles));
 
         return accountMapper.toAccountResponse(accountRepository.save(account));
     }

@@ -1,9 +1,7 @@
 package com.tpkhanh.chatappapi.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.tpkhanh.chatappapi.dto.request.ApiResponse;
-import com.tpkhanh.chatappapi.dto.request.AuthenticationRequest;
-import com.tpkhanh.chatappapi.dto.request.IntrospectRequest;
+import com.tpkhanh.chatappapi.dto.request.*;
 import com.tpkhanh.chatappapi.dto.response.AuthenticationResponse;
 import com.tpkhanh.chatappapi.dto.response.IntrospectResponse;
 import com.tpkhanh.chatappapi.service.AuthenticationService;
@@ -41,6 +39,26 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
 
         return ApiResponse.<IntrospectResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+
+        authenticationService.logout(request);
+
+        return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refreshToken")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshTokenRequest request)
+            throws ParseException, JOSEException {
+
+        var result = authenticationService.refreshToken(request);
+
+        return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();
     }
