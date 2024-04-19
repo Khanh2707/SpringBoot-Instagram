@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,10 @@ public class AccountService {
         Account account = accountMapper.toAccount(request);
 
         account.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        account.setDate_time_create(LocalDateTime.now());
+        account.setState_active(false);
+        account.setLast_time_active(LocalDateTime.now());
 
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());

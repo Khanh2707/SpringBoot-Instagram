@@ -3,8 +3,6 @@ package com.tpkhanh.chatappapi.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,7 +11,4 @@ import java.time.LocalDateTime;
 public class AccountCreationRequest {
     String account;
     String password;
-    LocalDateTime date_time_create;
-    Boolean state_active;
-    LocalDateTime last_time_active;
 }
