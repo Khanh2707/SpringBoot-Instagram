@@ -1,6 +1,5 @@
 package com.tpkhanh.chatappapi.dto.response;
 
-import com.tpkhanh.chatappapi.model.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

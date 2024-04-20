@@ -1,13 +1,12 @@
 package com.tpkhanh.chatappapi.configuration;
 
-import com.tpkhanh.chatappapi.enums.Role;
+import com.tpkhanh.chatappapi.enums.RoleEnum;
 import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,7 @@ public class ApplicationInitConfig {
         return args -> {
             if (accountRepository.findByAccount("admin").isEmpty()) {
                 var roles = new HashSet<String>();
-                roles.add(Role.ADMIN.name());
+                roles.add(RoleEnum.ADMIN.name());
                 Account account = Account.builder()
                         .account("admin")
                         .password(passwordEncoder.encode("admin"))

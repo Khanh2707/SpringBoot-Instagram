@@ -3,11 +3,12 @@ package com.tpkhanh.chatappapi.service;
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
-import com.tpkhanh.chatappapi.enums.Role;
+import com.tpkhanh.chatappapi.enums.RoleEnum;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
 import com.tpkhanh.chatappapi.mapper.AccountMapper;
 import com.tpkhanh.chatappapi.model.Account;
+import com.tpkhanh.chatappapi.model.Role;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import com.tpkhanh.chatappapi.repository.RoleRepository;
 import lombok.AccessLevel;
@@ -17,14 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,11 +56,11 @@ public class AccountService {
 
     public AccountResponse getMyAccount() {
         var context = SecurityContextHolder.getContext();
-        String userNameAccount = context.getAuthentication().getName();
+        String usernameAccount = context.getAuthentication().getName();
 
-        Account account = accountRepository.findByAccount(userNameAccount).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = accountRepository.findByAccount(usernameAccount).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-        return  accountMapper.toAccountResponse(account);
+        return accountMapper.toAccountResponse(account);
     }
 
     public AccountResponse createAccount(AccountCreationRequest request) {
@@ -72,14 +72,17 @@ public class AccountService {
 
         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        account.setDate_time_create(LocalDateTime.now());
+        account.setDate_time_create(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         account.setState_active(false);
-        account.setLast_time_active(LocalDateTime.now());
+        account.setLast_time_active(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+        HashSet<Role> roles = new HashSet<>();
+//        roles.add(Role.USER.name());
 
-//        account.setRoles(roles);
+        Role rolesUser = roleRepository.findById(RoleEnum.USER.name())
+                .orElseThrow(() -> new RuntimeException("Role USER not found"));
+        roles.add(rolesUser);
+        account.setRoles(roles);
 
         return accountMapper.toAccountResponse(accountRepository.save(account));
     }

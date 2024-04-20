@@ -24,6 +24,9 @@ public class Account {
     Boolean state_active;
     LocalDateTime last_time_active;
 
+    @OneToOne(mappedBy = "account")
+    User user;
+
     @ManyToMany
     Set<Role> roles;
 }
