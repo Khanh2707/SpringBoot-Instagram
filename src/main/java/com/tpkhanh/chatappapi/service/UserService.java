@@ -38,9 +38,12 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request) {
 
+        if (userRepository.existsByIdUser(request.getIdUser()))
+            throw new AppException(ErrorCode.ID_USER_EXISTED);
+
         User user = userMapper.toUser(request);
 
-        Account account = accountRepository.findById(request.getId_account_user()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = accountRepository.findById(request.getIdAccountUser()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         user.setAccount(account);
 
         return userMapper.toUserResponse(userRepository.save(user));

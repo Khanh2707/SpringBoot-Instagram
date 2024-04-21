@@ -12,10 +12,10 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountResponse {
-    Integer id_account;
+    Integer idAccount;
     String account;
-    LocalDateTime date_time_create;
-    Boolean state_active;
-    LocalDateTime last_time_active;
+    LocalDateTime dateTimeCreate;
+    Boolean stateActive;
+    LocalDateTime lastTimeActive;
     Set<RoleResponse> roles;
 }

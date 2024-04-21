@@ -13,7 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountUpdateRequest {
     String password;
-    Boolean state_active;
-    LocalDateTime last_time_active;
+    Boolean stateActive;
+    LocalDateTime lastTimeActive;
     List<String> roles;
 }

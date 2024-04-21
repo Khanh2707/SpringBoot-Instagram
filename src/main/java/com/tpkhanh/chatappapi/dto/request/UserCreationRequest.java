@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
-    String id_user;
+    String idUser;
     String name;
-    Integer id_account_user;
+    Integer idAccountUser;
 }

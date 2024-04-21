@@ -32,9 +32,9 @@ public class ApplicationInitConfig {
                 Account account = Account.builder()
                         .account("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .date_time_create(LocalDateTime.now())
-                        .state_active(false)
-                        .last_time_active(LocalDateTime.now())
+                        .dateTimeCreate(LocalDateTime.now())
+                        .stateActive(false)
+                        .lastTimeActive(LocalDateTime.now())
 //                        .roles(roles)
                         .build();
 

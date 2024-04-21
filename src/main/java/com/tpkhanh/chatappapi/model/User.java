@@ -13,13 +13,13 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class User {
     @Id
-    String id_user;
+    String idUser;
     String avatar;
     String name;
     String description;
     Boolean gender;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_account_user", referencedColumnName = "id_account")
+    @JoinColumn(name = "idAccountUser", referencedColumnName = "idAccount")
     Account account;
 }

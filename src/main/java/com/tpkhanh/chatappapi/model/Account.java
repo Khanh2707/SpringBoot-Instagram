@@ -17,12 +17,12 @@ import java.util.Set;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id_account;
+    Integer idAccount;
     String account;
     String password;
-    LocalDateTime date_time_create;
-    Boolean state_active;
-    LocalDateTime last_time_active;
+    LocalDateTime dateTimeCreate;
+    Boolean stateActive;
+    LocalDateTime lastTimeActive;
 
     @OneToOne(mappedBy = "account")
     User user;

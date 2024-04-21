@@ -11,6 +11,7 @@ public enum ErrorCode {
     ACCOUNT_NOT_FOUND(1002, "Account not found", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1004, "Unauthorized", HttpStatus.FORBIDDEN),
+    ID_USER_EXISTED(1005, "Id User already exists", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;
