@@ -1,6 +1,7 @@
 package com.tpkhanh.chatappapi.service;
 
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
+import com.tpkhanh.chatappapi.dto.request.AccountUpdatePasswordRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.enums.RoleEnum;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 
@@ -72,9 +72,9 @@ public class AccountService {
 
         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        account.setDateTimeCreate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        account.setDateTimeCreate(LocalDateTime.now());
         account.setStateActive(false);
-        account.setLastTimeActive(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        account.setLastTimeActive(LocalDateTime.now());
 
         HashSet<Role> roles = new HashSet<>();
 //        roles.add(Role.USER.name());
@@ -99,6 +99,24 @@ public class AccountService {
         account.setRoles(new HashSet<>(roles));
 
         return accountMapper.toAccountResponse(accountRepository.save(account));
+    }
+
+    public AccountResponse updateAccountPassword(Integer accountId, AccountUpdatePasswordRequest request) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        log.info(request.getPassword());
+        log.info(request.getCurrentPassword());
+        if (passwordEncoder.matches(request.getCurrentPassword(), account.getPassword())) {
+            accountMapper.updateAccountPassword(account, request);
+
+            account.setPassword(passwordEncoder.encode(request.getPassword()));
+
+            return accountMapper.toAccountResponse(accountRepository.save(account));
+        }
+        else {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
     }
 
     public void deleteAccount(Integer accountId) {

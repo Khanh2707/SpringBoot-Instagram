@@ -1,6 +1,7 @@
 package com.tpkhanh.chatappapi.controller;
 
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
+import com.tpkhanh.chatappapi.dto.request.AccountUpdatePasswordRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.request.ApiResponse;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
@@ -61,6 +62,13 @@ public class AccountController {
     ApiResponse<AccountResponse> updateAccount(@PathVariable Integer accountId, @RequestBody AccountUpdateRequest request) {
         return ApiResponse.<AccountResponse>builder()
                 .result(accountService.updateAccount(accountId, request))
+                .build();
+    }
+
+    @PutMapping("password/{accountId}")
+    ApiResponse<AccountResponse> updateAccountPassword(@PathVariable Integer accountId, @RequestBody AccountUpdatePasswordRequest request) {
+        return ApiResponse.<AccountResponse>builder()
+                .result(accountService.updateAccountPassword(accountId, request))
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package com.tpkhanh.chatappapi.dto.response;
+package com.tpkhanh.chatappapi.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,9 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    String idUser;
-    String avatar;
+public class UserUpdateInfoRequest {
     String name;
     String description;
     Boolean gender;

@@ -1,7 +1,9 @@
 package com.tpkhanh.chatappapi.service;
 
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
+import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.request.UserCreationRequest;
+import com.tpkhanh.chatappapi.dto.request.UserUpdateInfoRequest;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.UserResponse;
 import com.tpkhanh.chatappapi.enums.RoleEnum;
@@ -45,6 +47,15 @@ public class UserService {
 
         Account account = accountRepository.findById(request.getIdAccountUser()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         user.setAccount(account);
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public UserResponse updateUserInfo(String userId, UserUpdateInfoRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_USER_EXISTED));
+
+        userMapper.updateUserInfo(user, request);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

@@ -12,6 +12,7 @@ public enum ErrorCode {
     UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1004, "Unauthorized", HttpStatus.FORBIDDEN),
     ID_USER_EXISTED(1005, "Id User already exists", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD(1006, "Invalid password", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;
