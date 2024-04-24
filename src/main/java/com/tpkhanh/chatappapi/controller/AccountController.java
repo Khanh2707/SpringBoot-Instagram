@@ -5,7 +5,6 @@ import com.tpkhanh.chatappapi.dto.request.AccountUpdatePasswordRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.request.ApiResponse;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
-import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.service.AccountService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

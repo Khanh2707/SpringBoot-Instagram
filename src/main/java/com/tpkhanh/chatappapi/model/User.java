@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,6 +20,8 @@ public class User {
     String name;
     String description;
     Boolean gender;
+    Boolean stateActive;
+    LocalDateTime lastTimeActive;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idAccountUser", referencedColumnName = "idAccount")

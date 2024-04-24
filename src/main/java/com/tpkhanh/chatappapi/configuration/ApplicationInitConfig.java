@@ -33,8 +33,6 @@ public class ApplicationInitConfig {
                         .account("admin")
                         .password(passwordEncoder.encode("admin"))
                         .dateTimeCreate(LocalDateTime.now())
-                        .stateActive(false)
-                        .lastTimeActive(LocalDateTime.now())
 //                        .roles(roles)
                         .build();
 

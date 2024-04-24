@@ -21,8 +21,6 @@ public class Account {
     String account;
     String password;
     LocalDateTime dateTimeCreate;
-    Boolean stateActive;
-    LocalDateTime lastTimeActive;
 
     @OneToOne(mappedBy = "account")
     User user;

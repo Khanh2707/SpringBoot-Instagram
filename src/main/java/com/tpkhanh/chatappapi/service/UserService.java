@@ -46,6 +46,9 @@ public class UserService {
 
         User user = userMapper.toUser(request);
 
+        user.setStateActive(false);
+        user.setLastTimeActive(LocalDateTime.now());
+
         Account account = accountRepository.findById(request.getIdAccountUser()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         user.setAccount(account);
 
@@ -63,7 +66,13 @@ public class UserService {
 
     public List<UserResponse> getUsersByKeyword(String keyword, String idUser) {
         return userRepository.findAll().stream()
-                .filter(user -> user.getIdUser().contains(keyword) && !user.getIdUser().equals(idUser))
-                .map(userMapper::toUserResponse).toList();
+                .filter(user -> {
+                    if (!idUser.equals("null") && !idUser.isEmpty()) {
+                        return user.getIdUser().contains(keyword) && !user.getIdUser().equals(idUser);
+                    }
+                    return user.getIdUser().contains(keyword);
+                })
+                .map(userMapper::toUserResponse)
+                .toList();
     }
 }

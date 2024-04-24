@@ -3,6 +3,8 @@ package com.tpkhanh.chatappapi.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -14,4 +16,6 @@ public class UserResponse {
     String name;
     String description;
     Boolean gender;
+    Boolean stateActive;
+    LocalDateTime lastTimeActive;
 }

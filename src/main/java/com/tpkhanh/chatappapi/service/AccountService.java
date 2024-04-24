@@ -73,8 +73,6 @@ public class AccountService {
         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
         account.setDateTimeCreate(LocalDateTime.now());
-        account.setStateActive(false);
-        account.setLastTimeActive(LocalDateTime.now());
 
         HashSet<Role> roles = new HashSet<>();
 //        roles.add(Role.USER.name());

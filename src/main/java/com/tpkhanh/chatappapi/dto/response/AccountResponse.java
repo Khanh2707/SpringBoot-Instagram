@@ -16,9 +16,6 @@ public class AccountResponse {
     Integer idAccount;
     String account;
     LocalDateTime dateTimeCreate;
-    Boolean stateActive;
-    LocalDateTime lastTimeActive;
     UserResponse user;
-    
     Set<RoleResponse> roles;
 }

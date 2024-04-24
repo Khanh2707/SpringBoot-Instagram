@@ -28,6 +28,13 @@ public class SearchHistoryController {
                 .build();
     }
 
+    @GetMapping("/{idUser1}")
+    ApiResponse<List<SearchHistoryResponse>> getAllByUser1SearchHistory(@PathVariable String idUser1) {
+        return ApiResponse.<List<SearchHistoryResponse>>builder()
+                .result(searchHistoryService.getAllByUser1SearchHistory(idUser1))
+                .build();
+    }
+
     @PostMapping("")
     ApiResponse<SearchHistoryResponse> createSearchHistory(@RequestBody SearchHistoryCreationRequest request) {
         return ApiResponse.<SearchHistoryResponse>builder()

@@ -1,6 +1,7 @@
 package com.tpkhanh.chatappapi.service;
 
 import com.tpkhanh.chatappapi.dto.request.SearchHistoryCreationRequest;
+import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.SearchHistoryResponse;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
@@ -31,6 +32,12 @@ public class SearchHistoryService {
 
     public List<SearchHistoryResponse> getAllSearchHistory() {
         return searchHistoryRepository.findAllByOrderByDateTimeSearchDesc().stream().map(searchHistoryMapper::toSearchHistoryResponse).toList();
+    }
+
+    public List<SearchHistoryResponse> getAllByUser1SearchHistory(String idUser1) {
+        return searchHistoryRepository.findById_IdUser1(idUser1).stream()
+                .map(searchHistoryMapper::toSearchHistoryResponse)
+                .toList();
     }
 
     public SearchHistoryResponse createSearchHistory(SearchHistoryCreationRequest request) {
