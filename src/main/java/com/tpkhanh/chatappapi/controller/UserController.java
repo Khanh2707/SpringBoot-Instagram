@@ -1,7 +1,6 @@
 package com.tpkhanh.chatappapi.controller;
 
 import com.tpkhanh.chatappapi.dto.request.*;
-import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.UserResponse;
 import com.tpkhanh.chatappapi.service.UserService;
 import lombok.AccessLevel;
@@ -9,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -30,6 +31,13 @@ public class UserController {
     ApiResponse<UserResponse> updateInfoUser(@PathVariable String userId, @RequestBody UserUpdateInfoRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUserInfo(userId, request))
+                .build();
+    }
+
+    @GetMapping("/{keyword}/{idUser}")
+    ApiResponse<List<UserResponse>> getUsersByKeyword(@PathVariable String keyword, @PathVariable String idUser) {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsersByKeyword(keyword, idUser))
                 .build();
     }
 }

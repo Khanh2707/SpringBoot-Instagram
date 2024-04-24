@@ -12,13 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountResponse {
-    Integer idAccount;
-    String account;
-    LocalDateTime dateTimeCreate;
-    Boolean stateActive;
-    LocalDateTime lastTimeActive;
-    UserResponse user;
-    
-    Set<RoleResponse> roles;
+public class SearchHistoryResponse {
+    UserResponse user1;
+    UserResponse user2;
+    LocalDateTime dateTimeSearch;
 }

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +59,11 @@ public class UserService {
         userMapper.updateUserInfo(user, request);
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public List<UserResponse> getUsersByKeyword(String keyword, String idUser) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getIdUser().contains(keyword) && !user.getIdUser().equals(idUser))
+                .map(userMapper::toUserResponse).toList();
     }
 }
