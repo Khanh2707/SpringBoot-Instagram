@@ -5,8 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -15,20 +13,16 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Account {
+public class LogLockAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer idAccount;
-    String account;
-    String password;
-    LocalDateTime dateTimeCreate;
+    Integer idLogLockAccount;
+    String reasonLock;
+    Boolean stateLock;
+    LocalDateTime dateTimeLock;
 
-    @OneToOne(mappedBy = "account")
-    User user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idAccountLogLockAccount", referencedColumnName = "idAccount")
+    Account account;
 
-    @OneToMany(mappedBy = "account")
-    List<LogLockAccount> logLockAccounts;
-
-    @ManyToMany
-    Set<Role> roles;
 }

@@ -5,10 +5,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.tpkhanh.chatappapi.dto.request.AuthenticationRequest;
-import com.tpkhanh.chatappapi.dto.request.IntrospectRequest;
-import com.tpkhanh.chatappapi.dto.request.LogoutRequest;
-import com.tpkhanh.chatappapi.dto.request.RefreshTokenRequest;
+import com.tpkhanh.chatappapi.dto.request.*;
 import com.tpkhanh.chatappapi.dto.response.AuthenticationResponse;
 import com.tpkhanh.chatappapi.dto.response.IntrospectResponse;
 import com.tpkhanh.chatappapi.exception.AppException;
@@ -17,12 +14,15 @@ import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.model.InvalidatedToken;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import com.tpkhanh.chatappapi.repository.InvalidatedTokenRepository;
+import com.tpkhanh.chatappapi.repository.LogLockAccountRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,6 +43,8 @@ public class AuthenticationService {
     AccountRepository accountRepository;
 
     InvalidatedTokenRepository invalidatedTokenRepository;
+
+    LogLockAccountRepository logLockAccountRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -76,6 +78,14 @@ public class AuthenticationService {
 
         if (!authenticated) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        boolean checkExisted = logLockAccountRepository.existsByAccount_IdAccount(account.getIdAccount());
+
+        if (checkExisted) {
+            if (logLockAccountRepository.findFirstByAccount_IdAccountOrderByDateTimeLockDesc(account.getIdAccount()).getStateLock()) {
+                throw new RuntimeException(logLockAccountRepository.findFirstByAccount_IdAccountOrderByDateTimeLockDesc(account.getIdAccount()).getReasonLock());
+            }
         }
 
         var token = generateToken(account);

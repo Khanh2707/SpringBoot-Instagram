@@ -2,7 +2,7 @@ package com.tpkhanh.chatappapi.service;
 
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdatePasswordRequest;
-import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
+import com.tpkhanh.chatappapi.dto.request.AccountUpdateRoleRequest;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.enums.RoleEnum;
 import com.tpkhanh.chatappapi.exception.AppException;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,12 @@ public class AccountService {
         log.info("in method getAccountById");
 
         return accountMapper.toAccountResponse(accountRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND)));
+    }
+
+    public List<AccountResponse> getAccountByIdUser(String idUser) {
+        return accountRepository.findByUser_IdUserContaining(idUser).stream()
+                .map(accountMapper::toAccountResponse)
+                .toList();
     }
 
     public AccountResponse getMyAccount() {
@@ -85,13 +92,11 @@ public class AccountService {
         return accountMapper.toAccountResponse(accountRepository.save(account));
     }
 
-    public AccountResponse updateAccount(Integer accountId, AccountUpdateRequest request) {
+    public AccountResponse updateAccountRole(Integer accountId, AccountUpdateRoleRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-        accountMapper.updateAccount(account, request);
-
-        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        accountMapper.updateAccountRole(account, request);
 
         var roles = roleRepository.findAllById(request.getRoles());
         account.setRoles(new HashSet<>(roles));

@@ -14,6 +14,8 @@ public enum ErrorCode {
     ID_USER_EXISTED(1005, "Id User already exists", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(1006, "Invalid password", HttpStatus.BAD_REQUEST),
     ID_USER_NOT_EXISTED(1007, "Id User not already exists", HttpStatus.BAD_REQUEST),
+    ACCOUNT_HAS_BEEN_LOCK(1008, "Account has been lock", HttpStatus.BAD_REQUEST),
+    ACCOUNT_NOT_LOCK(1009, "Account not lock", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

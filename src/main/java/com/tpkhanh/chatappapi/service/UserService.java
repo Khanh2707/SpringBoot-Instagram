@@ -1,17 +1,12 @@
 package com.tpkhanh.chatappapi.service;
 
-import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
-import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
 import com.tpkhanh.chatappapi.dto.request.UserCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.UserUpdateInfoRequest;
-import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.UserResponse;
-import com.tpkhanh.chatappapi.enums.RoleEnum;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
 import com.tpkhanh.chatappapi.mapper.UserMapper;
 import com.tpkhanh.chatappapi.model.Account;
-import com.tpkhanh.chatappapi.model.Role;
 import com.tpkhanh.chatappapi.model.User;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import com.tpkhanh.chatappapi.repository.UserRepository;
@@ -19,12 +14,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
 import java.util.List;
 
 @Service

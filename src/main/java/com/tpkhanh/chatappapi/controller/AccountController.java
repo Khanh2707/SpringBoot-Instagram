@@ -2,7 +2,7 @@ package com.tpkhanh.chatappapi.controller;
 
 import com.tpkhanh.chatappapi.dto.request.AccountCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.AccountUpdatePasswordRequest;
-import com.tpkhanh.chatappapi.dto.request.AccountUpdateRequest;
+import com.tpkhanh.chatappapi.dto.request.AccountUpdateRoleRequest;
 import com.tpkhanh.chatappapi.dto.request.ApiResponse;
 import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.service.AccountService;
@@ -36,6 +36,13 @@ public class AccountController {
                 .build();
     }
 
+    @GetMapping("/by_user/{userId}")
+    ApiResponse<List<AccountResponse>> getAccountByIdUser(@PathVariable String userId) {
+        return ApiResponse.<List<AccountResponse>>builder()
+                .result(accountService.getAccountByIdUser(userId))
+                .build();
+    }
+
     @GetMapping("/{accountId}")
     ApiResponse<AccountResponse> getAccount(@PathVariable Integer accountId) {
         return ApiResponse.<AccountResponse>builder()
@@ -57,10 +64,10 @@ public class AccountController {
                 .build();
     }
 
-    @PutMapping("/{accountId}")
-    ApiResponse<AccountResponse> updateAccount(@PathVariable Integer accountId, @RequestBody AccountUpdateRequest request) {
+    @PutMapping("/role/{accountId}")
+    ApiResponse<AccountResponse> updateAccountRole(@PathVariable Integer accountId, @RequestBody AccountUpdateRoleRequest request) {
         return ApiResponse.<AccountResponse>builder()
-                .result(accountService.updateAccount(accountId, request))
+                .result(accountService.updateAccountRole(accountId, request))
                 .build();
     }
 

@@ -1,10 +1,10 @@
 package com.tpkhanh.chatappapi.dto.response;
 
-import com.tpkhanh.chatappapi.model.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -18,4 +18,5 @@ public class AccountResponse {
     LocalDateTime dateTimeCreate;
     UserResponse user;
     Set<RoleResponse> roles;
+    List<LogLockAccountResponse> logLockAccounts;
 }
