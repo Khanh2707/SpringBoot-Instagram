@@ -15,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,8 @@ public class UserService {
     UserRepository userRepository;
 
     AccountRepository accountRepository;
+
+    CloudinaryService cloudinaryService;
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -52,6 +57,19 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.ID_USER_EXISTED));
 
         userMapper.updateUserInfo(user, request);
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public UserResponse updateUserAvatar(String userId, MultipartFile avatar) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_USER_EXISTED));
+
+        Map r = cloudinaryService.uploadFile(avatar, "avatar");
+
+        String urlAvatar = (String) r.get("secure_url");
+
+        user.setAvatar(urlAvatar);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
