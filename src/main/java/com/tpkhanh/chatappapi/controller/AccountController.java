@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,15 +25,15 @@ public class AccountController {
 
     AccountService accountService;
 
-    @GetMapping("")
-    ApiResponse<List<AccountResponse>> getAllAccounts() {
+    @GetMapping("/{page}/{size}")
+    ApiResponse<Page<AccountResponse>> getAllAccounts(@PathVariable int page, @PathVariable int size) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         log.info("Account: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
-        return ApiResponse.<List<AccountResponse>>builder()
-                .result(accountService.getAllAccounts())
+        return ApiResponse.<Page<AccountResponse>>builder()
+                .result(accountService.getAllAccounts(page, size))
                 .build();
     }
 

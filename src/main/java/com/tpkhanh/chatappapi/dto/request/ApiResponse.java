@@ -14,4 +14,5 @@ public class ApiResponse <T> {
     @Builder.Default int code = 1;
     String message;
     T result;
+    T infoPage;
 }
