@@ -2,6 +2,7 @@ package com.tpkhanh.chatappapi.service;
 
 import com.tpkhanh.chatappapi.dto.request.UserCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.UserUpdateInfoRequest;
+import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.UserResponse;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
@@ -48,6 +49,10 @@ public class UserService {
                 .toList();
     }
 
+    public UserResponse fix(String userId) {
+        return userMapper.toUserResponse(userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+    }
+
     public UserResponse createUser(UserCreationRequest request) {
 
         if (userRepository.existsByIdUser(request.getIdUser()))
@@ -92,7 +97,7 @@ public class UserService {
 
         cloudinaryService.destroyFile("avatar", user.getAvatar());
 
-        user.setAvatar(nul);
+        user.setAvatar(null);
 
         userRepository.save(user);
     }

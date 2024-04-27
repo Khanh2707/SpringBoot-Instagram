@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, SearchHistoryKey> {
     Collection<SearchHistory> findAllByOrderByDateTimeSearchDesc();
-    List<SearchHistory> findById_IdUser1(String idUser1);
+    List<SearchHistory> findById_IdUser1OrderByDateTimeSearchDesc(String idUser1);
 }

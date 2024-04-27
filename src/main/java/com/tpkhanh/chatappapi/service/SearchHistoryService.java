@@ -35,7 +35,7 @@ public class SearchHistoryService {
     }
 
     public List<SearchHistoryResponse> getAllByUser1SearchHistory(String idUser1) {
-        return searchHistoryRepository.findById_IdUser1(idUser1).stream()
+        return searchHistoryRepository.findById_IdUser1OrderByDateTimeSearchDesc(idUser1).stream()
                 .map(searchHistoryMapper::toSearchHistoryResponse)
                 .toList();
     }

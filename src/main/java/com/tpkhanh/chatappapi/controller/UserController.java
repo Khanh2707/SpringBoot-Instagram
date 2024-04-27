@@ -29,6 +29,13 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/{idUser}")
+    ApiResponse<UserResponse> getUserById(@PathVariable String idUser) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUserById(idUser))
+                .build();
+    }
+
     @PostMapping("")
     ApiResponse<UserResponse> createUser(@RequestBody UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()

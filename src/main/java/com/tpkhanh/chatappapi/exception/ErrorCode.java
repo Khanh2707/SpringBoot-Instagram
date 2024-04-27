@@ -16,6 +16,7 @@ public enum ErrorCode {
     ID_USER_NOT_EXISTED(1007, "Id User not already exists", HttpStatus.BAD_REQUEST),
     ACCOUNT_HAS_BEEN_LOCK(1008, "Account has been lock", HttpStatus.BAD_REQUEST),
     ACCOUNT_NOT_LOCK(1009, "Account not lock", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1010, "User not found", HttpStatus.NOT_FOUND)
     ;
 
     private int code;
