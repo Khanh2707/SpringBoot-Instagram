@@ -22,6 +22,13 @@ public class UserController {
 
     UserService userService;
 
+    @GetMapping("/{keyword}/{idUser}")
+    ApiResponse<List<UserResponse>> getUsersByKeyword(@PathVariable String keyword, @PathVariable String idUser) {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsersByKeyword(keyword, idUser))
+                .build();
+    }
+
     @PostMapping("")
     ApiResponse<UserResponse> createUser(@RequestBody UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
@@ -43,10 +50,11 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{keyword}/{idUser}")
-    ApiResponse<List<UserResponse>> getUsersByKeyword(@PathVariable String keyword, @PathVariable String idUser) {
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getUsersByKeyword(keyword, idUser))
+    @DeleteMapping("/avatar/{userId}")
+    ApiResponse<String> deleteUserAvatar(@PathVariable String userId) throws IOException {
+        userService.deleteUserAvatar(userId);
+        return ApiResponse.<String>builder()
+                .result("Avatar has been deleted")
                 .build();
     }
 }

@@ -36,6 +36,18 @@ public class UserService {
 
     CloudinaryService cloudinaryService;
 
+    public List<UserResponse> getUsersByKeyword(String keyword, String idUser) {
+        return userRepository.findAll().stream()
+                .filter(user -> {
+                    if (!idUser.equals("null") && !idUser.isEmpty()) {
+                        return user.getIdUser().contains(keyword) && !user.getIdUser().equals(idUser);
+                    }
+                    return user.getIdUser().contains(keyword);
+                })
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
     public UserResponse createUser(UserCreationRequest request) {
 
         if (userRepository.existsByIdUser(request.getIdUser()))
@@ -65,7 +77,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.ID_USER_EXISTED));
 
-        Map r = cloudinaryService.uploadFile(avatar, "avatar");
+        Map r = cloudinaryService.uploadFile(avatar, "avatar", user.getAvatar());
 
         String urlAvatar = (String) r.get("secure_url");
 
@@ -74,15 +86,14 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public List<UserResponse> getUsersByKeyword(String keyword, String idUser) {
-        return userRepository.findAll().stream()
-                .filter(user -> {
-                    if (!idUser.equals("null") && !idUser.isEmpty()) {
-                        return user.getIdUser().contains(keyword) && !user.getIdUser().equals(idUser);
-                    }
-                    return user.getIdUser().contains(keyword);
-                })
-                .map(userMapper::toUserResponse)
-                .toList();
+    public void deleteUserAvatar(String userId) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_USER_EXISTED));
+
+        cloudinaryService.destroyFile("avatar", user.getAvatar());
+
+        user.setAvatar(nul);
+
+        userRepository.save(user);
     }
 }
