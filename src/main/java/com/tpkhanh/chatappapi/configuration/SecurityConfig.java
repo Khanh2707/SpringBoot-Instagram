@@ -30,7 +30,8 @@ public class SecurityConfig {
             "/auth/introspect",
             "/auth/logout",
             "/auth/refreshToken",
-            "/api/users"
+            "/api/users",
+            "/api/verify_email"
     };
 
     @Autowired
@@ -41,6 +42,7 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.PUT).permitAll()
 //                .requestMatchers(HttpMethod.GET, "/api/accounts").hasAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated());
 

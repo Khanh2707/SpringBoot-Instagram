@@ -72,10 +72,10 @@ public class AccountController {
                 .build();
     }
 
-    @PutMapping("password/{accountId}")
-    ApiResponse<AccountResponse> updateAccountPassword(@PathVariable Integer accountId, @RequestBody AccountUpdatePasswordRequest request) {
+    @PutMapping("password/{username}")
+    ApiResponse<AccountResponse> updateAccountPassword(@PathVariable String username, @RequestBody AccountUpdatePasswordRequest request) {
         return ApiResponse.<AccountResponse>builder()
-                .result(accountService.updateAccountPassword(accountId, request))
+                .result(accountService.updateAccountPassword(username, request))
                 .build();
     }
 

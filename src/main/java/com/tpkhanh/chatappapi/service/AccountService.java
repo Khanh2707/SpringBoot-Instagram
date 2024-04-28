@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +43,8 @@ public class AccountService {
     PasswordEncoder passwordEncoder;
 
     RoleRepository roleRepository;
+
+    VerifyEmailService verifyEmailService;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public Page<AccountResponse> getAllAccounts(int page, int size) {
@@ -81,25 +82,30 @@ public class AccountService {
     }
 
     public AccountResponse createAccount(AccountCreationRequest request) {
-
         if (accountRepository.existsByAccount(request.getAccount()))
             throw new AppException(ErrorCode.ACCOUNT_EXISTED);
 
-        Account account = accountMapper.toAccount(request);
+        if (verifyEmailService.getVerifyEmailNewest(request.getAccount()).getCode().equals(request.getCode())) {
 
-        account.setPassword(passwordEncoder.encode(request.getPassword()));
+            Account account = accountMapper.toAccount(request);
 
-        account.setDateTimeCreate(LocalDateTime.now());
+            account.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<Role> roles = new HashSet<>();
+            account.setDateTimeCreate(LocalDateTime.now());
+
+            HashSet<Role> roles = new HashSet<>();
 //        roles.add(Role.USER.name());
 
-        Role rolesUser = roleRepository.findById(RoleEnum.USER.name())
-                .orElseThrow(() -> new RuntimeException("Role USER not found"));
-        roles.add(rolesUser);
-        account.setRoles(roles);
+            Role rolesUser = roleRepository.findById(RoleEnum.USER.name())
+                    .orElseThrow(() -> new RuntimeException("Role USER not found"));
+            roles.add(rolesUser);
+            account.setRoles(roles);
 
-        return accountMapper.toAccountResponse(accountRepository.save(account));
+            return accountMapper.toAccountResponse(accountRepository.save(account));
+        }
+        else {
+            throw new AppException(ErrorCode.INVALID_VERIFY_EMAIL);
+        }
     }
 
     public AccountResponse updateAccountRole(Integer accountId, AccountUpdateRoleRequest request) {
@@ -114,13 +120,11 @@ public class AccountService {
         return accountMapper.toAccountResponse(accountRepository.save(account));
     }
 
-    public AccountResponse updateAccountPassword(Integer accountId, AccountUpdatePasswordRequest request) {
-        Account account = accountRepository.findById(accountId)
+    public AccountResponse updateAccountPassword(String username, AccountUpdatePasswordRequest request) {
+        Account account = accountRepository.findByAccount(username)
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-        log.info(request.getPassword());
-        log.info(request.getCurrentPassword());
-        if (passwordEncoder.matches(request.getCurrentPassword(), account.getPassword())) {
+        if (passwordEncoder.matches(request.getCurrentPassword(), account.getPassword()) || verifyEmailService.getVerifyEmailNewest(username).getCode().equals(request.getCurrentPassword())) {
             accountMapper.updateAccountPassword(account, request);
 
             account.setPassword(passwordEncoder.encode(request.getPassword()));

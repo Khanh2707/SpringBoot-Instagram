@@ -49,7 +49,7 @@ public class UserService {
                 .toList();
     }
 
-    public UserResponse fix(String userId) {
+    public UserResponse getUserById(String userId) {
         return userMapper.toUserResponse(userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
