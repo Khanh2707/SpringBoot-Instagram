@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
@@ -13,16 +11,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class LogLockAccount {
+public class MediaPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer idLogLockAccount;
-    String reasonLock;
-    Boolean stateLock;
-    LocalDateTime dateTimeLock;
+    Integer idMediaPost;
+    String url;
+    String type;
 
     @ManyToOne
-    @JoinColumn(name = "idAccountLogLockAccount", referencedColumnName = "idAccount")
-    Account account;
-
+    @JoinColumn(name = "idPostMediaPost", referencedColumnName = "idPost")
+    Post post;
 }

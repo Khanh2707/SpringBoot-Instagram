@@ -17,7 +17,8 @@ public enum ErrorCode {
     ACCOUNT_HAS_BEEN_LOCK(1008, "Account has been lock", HttpStatus.BAD_REQUEST),
     ACCOUNT_NOT_LOCK(1009, "Account not lock", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1010, "User not found", HttpStatus.NOT_FOUND),
-    INVALID_VERIFY_EMAIL(1011, "Invalid verify email", HttpStatus.NOT_FOUND)
+    INVALID_VERIFY_EMAIL(1011, "Invalid verify email", HttpStatus.NOT_FOUND),
+    POST_NOT_FOUND(1012, "Post not found", HttpStatus.NOT_FOUND)
     ;
 
     private int code;

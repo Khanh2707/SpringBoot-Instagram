@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +24,10 @@ public class User {
     Boolean stateActive;
     LocalDateTime lastTimeActive;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idAccountUser", referencedColumnName = "idAccount")
     Account account;
+
+    @OneToMany(mappedBy = "user")
+    List<Post> posts;
 }
