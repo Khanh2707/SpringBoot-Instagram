@@ -45,6 +45,10 @@ public class PostService {
                 .toList();
     }
 
+    public PostResponse getPostById(Integer postId) {
+        return postMapper.toPostResponse(postRepository.findById(postId).orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND)));
+    }
+
     public PostResponse createPost(PostCreationRequest request) {
 
         Post post = postMapper.toPost(request);

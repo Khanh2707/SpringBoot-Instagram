@@ -38,6 +38,13 @@ public class PostController {
                 .build();
     }
 
+    @GetMapping("/{idPost}")
+    ApiResponse<PostResponse> getPostById(@PathVariable Integer idPost) {
+        return ApiResponse.<PostResponse>builder()
+                .result(postService.getPostById(idPost))
+                .build();
+    }
+
     @PostMapping("")
     ApiResponse<PostResponse> createPost(@RequestBody PostCreationRequest request) {
         return ApiResponse.<PostResponse>builder()
