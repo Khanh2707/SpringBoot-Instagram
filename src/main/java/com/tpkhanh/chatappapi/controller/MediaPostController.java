@@ -27,4 +27,12 @@ public class MediaPostController {
                 .result(mediaPostService.createMediaPost(fileMedia, type, post))
                 .build();
     }
+
+    @DeleteMapping("/all_by_post/{idPost}")
+    ApiResponse<String> deleteAllMediaPostByPost(@PathVariable Integer idPost) throws IOException {
+        mediaPostService.deleteAllMediaPostByPost(idPost);
+        return ApiResponse.<String>builder()
+                .result("Media of post has been deleted")
+                .build();
+    }
 }

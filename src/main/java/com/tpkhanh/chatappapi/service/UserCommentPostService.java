@@ -72,4 +72,20 @@ public class UserCommentPostService {
         UserCommentPostKey userCommentPostKey = new UserCommentPostKey(idUser, idCommentPost, idPost);
         userCommentPostRepository.deleteById(userCommentPostKey);
     }
+
+    public void deleteCommentsAndUserCommentsByPostId(Integer idPost) {
+        // 1. Lấy ra tất cả các UserCommentPost có idPost cụ thể
+        List<UserCommentPost> userCommentPosts = userCommentPostRepository.findByPost_IdPost(idPost);
+
+        // 2. Duyệt qua danh sách và lấy ra CommentPost tương ứng
+        List<CommentPost> commentPosts = userCommentPosts.stream()
+                .map(UserCommentPost::getCommentPost)
+                .toList();
+
+        // 4. Xóa tất cả các UserCommentPost có idPost tương ứng
+        userCommentPostRepository.deleteAll(userCommentPosts);
+
+        // 3. Xóa tất cả các CommentPost đã lấy được
+        commentPostRepository.deleteAll(commentPosts);
+    }
 }

@@ -57,4 +57,12 @@ public class UserLikePostController {
                 .result("Like of user has been deleted")
                 .build();
     }
+
+    @DeleteMapping("/all_by_post/{idPost}")
+    ApiResponse<String> deleteAllUserLikePostByPost(@PathVariable Integer idPost) {
+        userLikePostService.deleteAllUserLikePostByPost(idPost);
+        return ApiResponse.<String>builder()
+                .result("Like of user has been deleted")
+                .build();
+    }
 }

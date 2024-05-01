@@ -1,5 +1,6 @@
 package com.tpkhanh.chatappapi.repository;
 
+import com.tpkhanh.chatappapi.model.UserCommentPost;
 import com.tpkhanh.chatappapi.model.UserLikePost;
 import com.tpkhanh.chatappapi.model.UserLikePostKey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ public interface UserLikePostRepository extends JpaRepository<UserLikePost, User
     boolean existsByUser_IdUserAndPost_IdPost(String userId, Integer postId);
     long countByPost_IdPost(Integer postId);
     List<UserLikePost> findAllByPost_IdPost(Integer postId);
+    List<UserLikePost> findByPost_IdPost(Integer idPost);
 }

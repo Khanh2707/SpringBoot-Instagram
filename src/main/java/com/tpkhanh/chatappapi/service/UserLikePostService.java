@@ -72,4 +72,9 @@ public class UserLikePostService {
         UserLikePostKey userLikePostKey = new UserLikePostKey(idUser, idPost);
         userLikePostRepository.deleteById(userLikePostKey);
     }
+
+    public void deleteAllUserLikePostByPost(Integer idPost) {
+        List<UserLikePost> userLikePosts = userLikePostRepository.findByPost_IdPost(idPost);
+        userLikePostRepository.deleteAll(userLikePosts);
+    }
 }

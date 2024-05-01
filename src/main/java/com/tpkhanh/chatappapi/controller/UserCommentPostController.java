@@ -51,4 +51,12 @@ public class UserCommentPostController {
                 .result("Comment of user has been deleted")
                 .build();
     }
+
+    @DeleteMapping("/all_by_post/{idPost}")
+    ApiResponse<String> deleteCommentsAndUserCommentsByPostId(@PathVariable Integer idPost) {
+        userCommentPostService.deleteCommentsAndUserCommentsByPostId(idPost);
+        return ApiResponse.<String>builder()
+                .result("Post has been deleted")
+                .build();
+    }
 }

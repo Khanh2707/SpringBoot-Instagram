@@ -11,4 +11,5 @@ import java.util.List;
 public interface UserCommentPostRepository extends JpaRepository<UserCommentPost, UserCommentPostKey> {
     long countByPost_IdPost(Integer postId);
     List<UserCommentPost> findAllByPost_IdPostOrderByCommentPost_DateTimeCommentDesc(Integer idPost);
+    List<UserCommentPost> findByPost_IdPost(Integer idPost);
 }
