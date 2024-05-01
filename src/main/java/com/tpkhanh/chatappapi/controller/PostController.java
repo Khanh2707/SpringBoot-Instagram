@@ -2,10 +2,7 @@ package com.tpkhanh.chatappapi.controller;
 
 import com.tpkhanh.chatappapi.dto.request.ApiResponse;
 import com.tpkhanh.chatappapi.dto.request.PostCreationRequest;
-import com.tpkhanh.chatappapi.dto.request.UserCreationRequest;
-import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.PostResponse;
-import com.tpkhanh.chatappapi.dto.response.UserResponse;
 import com.tpkhanh.chatappapi.service.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,13 @@ import java.util.List;
 public class PostController {
 
     PostService postService;
+
+    @GetMapping("/count_post/{idUser}")
+    ApiResponse<Long> countAllByUser(@PathVariable String idUser) {
+        return ApiResponse.<Long>builder()
+                .result(postService.countAllByUser(idUser))
+                .build();
+    }
 
     @GetMapping("")
     ApiResponse<List<PostResponse>> getAllPosts() {
@@ -49,6 +53,14 @@ public class PostController {
     ApiResponse<PostResponse> createPost(@RequestBody PostCreationRequest request) {
         return ApiResponse.<PostResponse>builder()
                 .result(postService.createPost(request))
+                .build();
+    }
+
+    @DeleteMapping("/{idPost}")
+    ApiResponse<String> deletePost(@PathVariable Integer idPost) {
+        postService.deletePost(idPost);
+        return ApiResponse.<String>builder()
+                .result("Post has been deleted")
                 .build();
     }
 }

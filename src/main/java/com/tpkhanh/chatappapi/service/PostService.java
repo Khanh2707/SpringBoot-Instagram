@@ -33,6 +33,10 @@ public class PostService {
 
     UserRepository userRepository;
 
+    public long countAllByUser(String idUser) {
+        return postRepository.countAllByUser_IdUser(idUser);
+    }
+
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll().stream()
                 .map(postMapper::toPostResponse)
@@ -59,5 +63,9 @@ public class PostService {
         post.setUser(user);
 
         return postMapper.toPostResponse(postRepository.save(post));
+    }
+
+    public void deletePost(Integer idPost) {
+        postRepository.deleteById(idPost);
     }
 }
