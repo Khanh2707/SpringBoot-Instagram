@@ -22,6 +22,13 @@ public class UserController {
 
     UserService userService;
 
+    @GetMapping("/by_post/{idPost}")
+    ApiResponse<UserResponse> getUserByPost(@PathVariable Integer idPost) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUserByPost(idPost))
+                .build();
+    }
+
     @GetMapping("/{keyword}/{idUser}")
     ApiResponse<List<UserResponse>> getUsersByKeyword(@PathVariable String keyword, @PathVariable String idUser) {
         return ApiResponse.<List<UserResponse>>builder()

@@ -37,6 +37,10 @@ public class UserService {
 
     CloudinaryService cloudinaryService;
 
+    public UserResponse getUserByPost(Integer idPost) {
+        return userMapper.toUserResponse(userRepository.findByPostId(idPost).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+    }
+
     public List<UserResponse> getUsersByKeyword(String keyword, String idUser) {
         return userRepository.findAll().stream()
                 .filter(user -> {

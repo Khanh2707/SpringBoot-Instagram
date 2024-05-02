@@ -1,13 +1,10 @@
 package com.tpkhanh.chatappapi.service;
 
 import com.tpkhanh.chatappapi.dto.request.PostCreationRequest;
-import com.tpkhanh.chatappapi.dto.response.AccountResponse;
 import com.tpkhanh.chatappapi.dto.response.PostResponse;
-import com.tpkhanh.chatappapi.dto.response.UserResponse;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
 import com.tpkhanh.chatappapi.mapper.PostMapper;
-import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.model.Post;
 import com.tpkhanh.chatappapi.model.User;
 import com.tpkhanh.chatappapi.repository.PostRepository;
@@ -32,6 +29,12 @@ public class PostService {
     PostMapper postMapper;
 
     UserRepository userRepository;
+
+    public List<PostResponse> getRandomPostsExcludingUser(String idUser) {
+        return postRepository.getRandomPostsExcludingUser(idUser).stream()
+                .map(postMapper::toPostResponse)
+                .toList();
+    }
 
     public long countAllByUser(String idUser) {
         return postRepository.countAllByUser_IdUser(idUser);

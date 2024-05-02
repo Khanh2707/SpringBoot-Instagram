@@ -21,6 +21,13 @@ public class PostController {
 
     PostService postService;
 
+    @GetMapping("/random_excluding_user/{idUser}")
+    ApiResponse<List<PostResponse>> getRandomPostsExcludingUser(@PathVariable String idUser) {
+        return ApiResponse.<List<PostResponse>>builder()
+                .result(postService.getRandomPostsExcludingUser(idUser))
+                .build();
+    }
+
     @GetMapping("/count_post/{idUser}")
     ApiResponse<Long> countAllByUser(@PathVariable String idUser) {
         return ApiResponse.<Long>builder()
