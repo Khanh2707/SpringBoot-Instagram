@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_VERIFY_EMAIL(1011, "Invalid verify email", HttpStatus.NOT_FOUND),
     POST_NOT_FOUND(1012, "Post not found", HttpStatus.NOT_FOUND),
     COMMENT_POST_NOT_FOUND(1013, "Comment post not found", HttpStatus.NOT_FOUND),
+    MESSAGE_NOT_FOUND(1014, "Message not found", HttpStatus.NOT_FOUND),
     ;
 
     private int code;
