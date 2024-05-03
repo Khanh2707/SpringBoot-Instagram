@@ -18,8 +18,8 @@ public class UserMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idUserMessage;
     String message;
+    Boolean isCheck;
     LocalDateTime dateTimeMessage;
-    Boolean isRecall;
 
     @ManyToOne
     @JoinColumn(name = "id_user_user_message_1")

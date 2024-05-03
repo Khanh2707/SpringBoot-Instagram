@@ -28,4 +28,7 @@ public interface UserMessageRepository extends JpaRepository<UserMessage, Intege
             ") " +
             "AND (um.user1.idUser = :userId1 OR um.user2.idUser = :userId1)")
     List<UserMessage> findRecentUserMessagesWithOtherUsers(@Param("userId1") String userId1);
+
+    @Query("SELECT COUNT(m) FROM UserMessage m WHERE m.user2.idUser = :userId AND m.isCheck = false")
+    int countUncheckedMessagesForUser(@Param("userId") String userId);
 }

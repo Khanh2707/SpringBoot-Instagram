@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 public class UserMessageResponse {
     Integer idUserMessage;
     String message;
+    Boolean isCheck;
     LocalDateTime dateTimeMessage;
-    Boolean isRecall;
     UserResponse user1;
     UserResponse user2;
 }

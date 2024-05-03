@@ -1,11 +1,9 @@
 package com.tpkhanh.chatappapi.controller;
 
 import com.tpkhanh.chatappapi.dto.request.ApiResponse;
-import com.tpkhanh.chatappapi.dto.request.SearchHistoryCreationRequest;
 import com.tpkhanh.chatappapi.dto.request.UserMessageCreationRequest;
-import com.tpkhanh.chatappapi.dto.response.SearchHistoryResponse;
+import com.tpkhanh.chatappapi.dto.request.UserMessageUpdateIsCheckRequest;
 import com.tpkhanh.chatappapi.dto.response.UserMessageResponse;
-import com.tpkhanh.chatappapi.dto.response.UserResponse;
 import com.tpkhanh.chatappapi.service.UserMessageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +21,13 @@ import java.util.List;
 public class UserMessageController {
 
     UserMessageService userMessageService;
+
+    @GetMapping("/count_message_not_check_by_user_1/{idUser1}")
+    ApiResponse<Integer> countUncheckedMessagesByUser1Id(@PathVariable String idUser1) {
+        return ApiResponse.<Integer>builder()
+                .result(userMessageService.countUncheckedMessagesForUser(idUser1))
+                .build();
+    }
 
     @GetMapping("/all_latest_message_by_user_1/{idUser1}")
     ApiResponse<List<UserMessageResponse>> findRecentUserMessagesWithOtherUsers(@PathVariable String idUser1) {
@@ -42,6 +47,13 @@ public class UserMessageController {
     ApiResponse<UserMessageResponse> createUserMessage(@RequestBody UserMessageCreationRequest request) {
         return ApiResponse.<UserMessageResponse>builder()
                 .result(userMessageService.createUserMessage(request))
+                .build();
+    }
+
+    @PutMapping("/is_check")
+    ApiResponse<List<UserMessageResponse>> updateUserMessageIsCheck(@RequestBody UserMessageUpdateIsCheckRequest request) {
+        return ApiResponse.<List<UserMessageResponse>>builder()
+                .result(userMessageService.updateUserMessageIsCheck(request))
                 .build();
     }
 
