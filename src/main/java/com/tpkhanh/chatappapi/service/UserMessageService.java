@@ -64,7 +64,7 @@ public class UserMessageService {
     }
 
     public List<UserMessageResponse> updateUserMessageIsCheck(UserMessageUpdateIsCheckRequest request) {
-        List<UserMessage> userMessages = userMessageRepository.findLatestMessageBetweenUsers(request.getUser1(), request.getUser2());
+        List<UserMessage> userMessages = userMessageRepository.findUncheckedMessagesBetweenUsers(request.getUser1(), request.getUser2());
 
         for (UserMessage userMessage : userMessages) {
             userMessage.setIsCheck(true);

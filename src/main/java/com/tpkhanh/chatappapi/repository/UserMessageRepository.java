@@ -31,4 +31,10 @@ public interface UserMessageRepository extends JpaRepository<UserMessage, Intege
 
     @Query("SELECT COUNT(m) FROM UserMessage m WHERE m.user2.idUser = :userId AND m.isCheck = false")
     int countUncheckedMessagesForUser(@Param("userId") String userId);
+
+    @Query("SELECT um FROM UserMessage um " +
+            "WHERE (um.user1.idUser = :userId1 AND um.user2.idUser = :userId2) " +
+            "AND um.isCheck = false " +
+            "ORDER BY um.dateTimeMessage DESC")
+    List<UserMessage> findUncheckedMessagesBetweenUsers(@Param("userId1") String userId1, @Param("userId2") String userId2);
 }
