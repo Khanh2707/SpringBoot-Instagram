@@ -19,4 +19,10 @@ public class ChatSocketController {
         simpMessagingTemplate.convertAndSendToUser(messageSocket.getReceiverName(), "/private", messageSocket);
         return messageSocket;
     }
+
+    @MessageMapping("/notification")
+    public MessageSocket receiveNotification(@Payload MessageSocket messageSocket) {
+        simpMessagingTemplate.convertAndSendToUser(messageSocket.getReceiverName(), "/notification", messageSocket);
+        return messageSocket;
+    }
 }
