@@ -65,4 +65,12 @@ public class PostNotificationController {
                 .result("Comment post notification has been deleted.")
                 .build();
     }
+
+    @DeleteMapping("/all_by_action/{action}/{idPost}")
+    ApiResponse<String> deleteAllByAction(@PathVariable String action, @PathVariable Integer idPost) {
+        postNotificationService.deleteAllByAction(action, idPost);
+        return ApiResponse.<String>builder()
+                .result("All Like or Comment post notification has been deleted.")
+                .build();
+    }
 }

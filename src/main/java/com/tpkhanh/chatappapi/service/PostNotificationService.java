@@ -97,4 +97,8 @@ public class PostNotificationService {
     public void deleteCommentNotification(String action, Integer post, String user1, String user2, Integer commentPost) {
         postNotificationRepository.deleteByActionAndPost_IdPostAndUser1_IdUserAndUser2_IdUserAndCommentPost_IdCommentPost(action, post, user1, user2, commentPost);
     }
+
+    public void deleteAllByAction(String action, Integer post) {
+        postNotificationRepository.deleteAllByActionAndPost_IdPost(action, post);
+    }
 }

@@ -41,7 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, OAuth2ResourceServerProperties oAuth2ResourceServerProperties) throws Exception {
 
         httpSecurity.authorizeHttpRequests(request -> request
-//                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
 //                .requestMatchers(HttpMethod.PUT).permitAll()
 //                .requestMatchers(HttpMethod.GET, "/api/accounts").hasAuthority("SCOPE_ADMIN")
                         .anyRequest().permitAll());

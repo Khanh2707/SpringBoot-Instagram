@@ -31,7 +31,7 @@ public class RoleController {
     }
 
     @GetMapping
-    ApiResponse<List<RoleResponse>> getAllPermission() {
+    ApiResponse<List<RoleResponse>> getAllRole() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .result(roleService.getAllRoles())
                 .build();

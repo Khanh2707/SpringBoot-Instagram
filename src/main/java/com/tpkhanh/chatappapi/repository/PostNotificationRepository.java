@@ -20,4 +20,7 @@ public interface PostNotificationRepository extends JpaRepository<PostNotificati
 
     @Transactional
     void deleteByActionAndPost_IdPostAndUser1_IdUserAndUser2_IdUserAndCommentPost_IdCommentPost(String action, Integer post, String user1, String user2, Integer commentPost);
+
+    @Transactional
+    void deleteAllByActionAndPost_IdPost(String action, Integer post);
 }
