@@ -112,6 +112,8 @@ public class AuthenticationService {
 
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
+            log.info(String.valueOf(expiryTime));
+
             InvalidatedToken invalidatedToken = InvalidatedToken.builder()
                     .id(jit)
                     .expiryDate(expiryTime)

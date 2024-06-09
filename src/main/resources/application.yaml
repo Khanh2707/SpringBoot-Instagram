@@ -1,0 +1,33 @@
+spring:
+    application:
+        name: chatapp-api
+    datasource:
+        url: jdbc:mysql://localhost:3307/chatapp
+        username: root
+        password: root
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQLDialect
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017/chatapp
+    mail:
+        host: smtp.gmail.com
+        username: nthtpk7h7i@gmail.com
+        password: iuthxokbyobtuhyd
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    starttls:
+                        enable: true
+                    auth: true
+
+jwt:
+    signerKey: nxor9bgcinNC55iFu5EkCbv07JO/tphq2PEdfixzojnp3SMJWYhMKaAYhaqVwpVK
+    valid-duration: 3600
+    refreshable-duration: 360000

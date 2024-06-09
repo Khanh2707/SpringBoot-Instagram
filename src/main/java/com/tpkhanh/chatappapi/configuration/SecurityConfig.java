@@ -34,6 +34,10 @@ public class SecurityConfig {
             "/api/verify_email"
     };
 
+    private final String[] WEBSOCKET_ENDPOINTS = {
+            "/ws/**"
+    };
+
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
@@ -42,9 +46,10 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(WEBSOCKET_ENDPOINTS).permitAll()
 //                .requestMatchers(HttpMethod.PUT).permitAll()
 //                .requestMatchers(HttpMethod.GET, "/api/accounts").hasAuthority("SCOPE_ADMIN")
-                        .anyRequest().permitAll());
+                        .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder))
