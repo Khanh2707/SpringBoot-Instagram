@@ -14,7 +14,7 @@ spring:
         show-sql: true
     data:
         mongodb:
-            uri: mongodb://localhost:27017/chatapp
+            uri: mongodb://root:root@localhost:27018/chatapp?authSource=admin
     mail:
         host: smtp.gmail.com
         username: nthtpk7h7i@gmail.com
@@ -31,3 +31,9 @@ jwt:
     signerKey: nxor9bgcinNC55iFu5EkCbv07JO/tphq2PEdfixzojnp3SMJWYhMKaAYhaqVwpVK
     valid-duration: 3600
     refreshable-duration: 360000
+
+outbound:
+  identity:
+    client-id: "597265228835-jveoo482dvt765q981urbgpfimn832dr.apps.googleusercontent.com"
+    client-secret: "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"
+    redirect-uri: "http://localhost:3000/authenticate"
