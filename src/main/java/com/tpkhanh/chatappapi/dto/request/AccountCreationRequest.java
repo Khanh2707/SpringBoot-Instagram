@@ -12,4 +12,6 @@ public class AccountCreationRequest {
     String account;
     String password;
     String code;
+    String idUser;
+    String name;
 }

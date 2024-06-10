@@ -10,8 +10,10 @@ import com.tpkhanh.chatappapi.exception.ErrorCode;
 import com.tpkhanh.chatappapi.mapper.AccountMapper;
 import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.model.Role;
+import com.tpkhanh.chatappapi.model.User;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import com.tpkhanh.chatappapi.repository.RoleRepository;
+import com.tpkhanh.chatappapi.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -45,6 +47,8 @@ public class AccountService {
     RoleRepository roleRepository;
 
     VerifyEmailService verifyEmailService;
+
+    UserRepository userRepository;
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public Page<AccountResponse> getAllAccounts(int page, int size) {
@@ -85,6 +89,9 @@ public class AccountService {
         if (accountRepository.existsByAccount(request.getAccount()))
             throw new AppException(ErrorCode.ACCOUNT_EXISTED);
 
+        if (userRepository.existsByIdUser(request.getIdUser()))
+            throw new AppException(ErrorCode.ID_USER_EXISTED);
+
         if (verifyEmailService.getVerifyEmailNewest(request.getAccount()).getCode().equals(request.getCode())) {
 
             Account account = accountMapper.toAccount(request);
@@ -101,7 +108,20 @@ public class AccountService {
             roles.add(rolesUser);
             account.setRoles(roles);
 
-            return accountMapper.toAccountResponse(accountRepository.save(account));
+            User user = new User();
+
+            user.setStateActive(false);
+            user.setLastTimeActive(LocalDateTime.now());
+
+            user.setIdUser(request.getIdUser());
+            user.setName(request.getName());
+            user.setAccount(account);
+
+            accountRepository.save(account);
+
+            userRepository.save(user);
+
+            return accountMapper.toAccountResponse(account);
         }
         else {
             throw new AppException(ErrorCode.INVALID_VERIFY_EMAIL);
