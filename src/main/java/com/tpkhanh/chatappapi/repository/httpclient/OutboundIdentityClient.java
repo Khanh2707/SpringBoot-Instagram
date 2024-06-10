@@ -1,4 +1,4 @@
-package com.tpkhanh.chatappapi.repository;
+package com.tpkhanh.chatappapi.repository.httpclient;
 
 import com.tpkhanh.chatappapi.dto.request.ExchangeTokenRequest;
 import com.tpkhanh.chatappapi.dto.response.ExchangeTokenResponse;

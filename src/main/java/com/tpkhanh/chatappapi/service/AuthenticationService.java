@@ -15,7 +15,8 @@ import com.tpkhanh.chatappapi.model.InvalidatedToken;
 import com.tpkhanh.chatappapi.repository.AccountRepository;
 import com.tpkhanh.chatappapi.repository.InvalidatedTokenRepository;
 import com.tpkhanh.chatappapi.repository.LogLockAccountRepository;
-import com.tpkhanh.chatappapi.repository.OutboundIdentityClient;
+import com.tpkhanh.chatappapi.repository.httpclient.OutboundIdentityClient;
+import com.tpkhanh.chatappapi.repository.httpclient.OutboundUserClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -46,6 +47,8 @@ public class AuthenticationService {
     LogLockAccountRepository logLockAccountRepository;
 
     OutboundIdentityClient outboundIdentityClient;
+
+    OutboundUserClient outboundUserClient;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -84,6 +87,10 @@ public class AuthenticationService {
                 .build());
 
         log.info("TOKEN RESPONSE {}", response);
+
+        var userInfo = outboundUserClient.getUserInfo("json", response.getAccessToken());
+
+        log.info("User Info {}", userInfo);
 
         return AuthenticationResponse.builder()
                 .token(response.getAccessToken())
