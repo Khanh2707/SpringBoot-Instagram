@@ -18,7 +18,7 @@ spring:
     mail:
         host: smtp.gmail.com
         username: nthtpk7h7i@gmail.com
-        password: iuthxokbyobtuhyd
+        password: ${MAIL_PASSWORD}
         port: 587
         properties:
             mail:
@@ -28,12 +28,12 @@ spring:
                     auth: true
 
 jwt:
-    signerKey: nxor9bgcinNC55iFu5EkCbv07JO/tphq2PEdfixzojnp3SMJWYhMKaAYhaqVwpVK
+    signerKey: ${SIGNER_KEY}
     valid-duration: 3600
     refreshable-duration: 360000
 
 outbound:
-  identity:
-    client-id: "597265228835-jveoo482dvt765q981urbgpfimn832dr.apps.googleusercontent.com"
-    client-secret: "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"
+  chatapp:
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
     redirect-uri: "http://localhost:3000/authenticate"

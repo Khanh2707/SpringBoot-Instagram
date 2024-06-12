@@ -8,14 +8,15 @@ import com.nimbusds.jwt.SignedJWT;
 import com.tpkhanh.chatappapi.dto.request.*;
 import com.tpkhanh.chatappapi.dto.response.AuthenticationResponse;
 import com.tpkhanh.chatappapi.dto.response.IntrospectResponse;
+import com.tpkhanh.chatappapi.enums.RoleEnum;
 import com.tpkhanh.chatappapi.exception.AppException;
 import com.tpkhanh.chatappapi.exception.ErrorCode;
 import com.tpkhanh.chatappapi.model.Account;
 import com.tpkhanh.chatappapi.model.InvalidatedToken;
-import com.tpkhanh.chatappapi.repository.AccountRepository;
-import com.tpkhanh.chatappapi.repository.InvalidatedTokenRepository;
-import com.tpkhanh.chatappapi.repository.LogLockAccountRepository;
-import com.tpkhanh.chatappapi.repository.httpclient.OutboundIdentityClient;
+import com.tpkhanh.chatappapi.model.Role;
+import com.tpkhanh.chatappapi.model.User;
+import com.tpkhanh.chatappapi.repository.*;
+import com.tpkhanh.chatappapi.repository.httpclient.OutboundChatappClient;
 import com.tpkhanh.chatappapi.repository.httpclient.OutboundUserClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,18 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +48,13 @@ public class AuthenticationService {
 
     LogLockAccountRepository logLockAccountRepository;
 
-    OutboundIdentityClient outboundIdentityClient;
+    OutboundChatappClient outboundChatappClient;
 
     OutboundUserClient outboundUserClient;
+
+    RoleRepository roleRepository;
+
+    UserRepository userRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -63,22 +69,22 @@ public class AuthenticationService {
     protected long REFRESHABLE_DURATION;
 
     @NonFinal
-    @Value("${outbound.identity.client-id}")
+    @Value("${outbound.chatapp.client-id}")
     protected String CLIENT_ID;
 
     @NonFinal
-    @Value("${outbound.identity.client-secret}")
+    @Value("${outbound.chatapp.client-secret}")
     protected String CLIENT_SECRET;
 
     @NonFinal
-    @Value("${outbound.identity.redirect-uri}")
+    @Value("${outbound.chatapp.redirect-uri}")
     protected String REDIRECT_URI;
 
     @NonFinal
     protected final String GRANT_TYPE = "authorization_code";
 
     public AuthenticationResponse outboundAuthenticate(String code){
-        var response = outboundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
+        var response = outboundChatappClient.exchangeToken(ExchangeTokenRequest.builder()
                 .code(code)
                 .clientId(CLIENT_ID)
                 .clientSecret(CLIENT_SECRET)
@@ -92,8 +98,36 @@ public class AuthenticationService {
 
         log.info("User Info {}", userInfo);
 
+        Set<Role> roles = new HashSet<>();
+        Role rolesUser = roleRepository.findById(RoleEnum.USER.name())
+                .orElseThrow(() -> new RuntimeException("Role USER not found"));
+        roles.add(rolesUser);
+
+        var account = accountRepository.findByAccount(userInfo.getEmail()).orElseGet(() -> {
+            Account newAccount = accountRepository.save(Account.builder()
+                    .account(userInfo.getEmail())
+                    .password("")
+                    .dateTimeCreate(LocalDateTime.now())
+                    .roles(roles)
+                    .build());
+
+            User newUser = userRepository.save(User.builder()
+                    .idUser(generateUserId(userInfo.getFamilyName() + " " + userInfo.getGivenName()))
+                    .avatar(userInfo.getPicture())
+                    .name(userInfo.getFamilyName() + userInfo.getGivenName())
+                    .lastTimeActive(LocalDateTime.now())
+                    .stateActive(false)
+                    .account(newAccount)
+                    .build());
+            userRepository.save(newUser);
+
+            return newAccount;
+        });
+
+        var token = generateToken(account);
+
         return AuthenticationResponse.builder()
-                .token(response.getAccessToken())
+                .token(token)
                 .build();
     }
 
@@ -248,5 +282,30 @@ public class AuthenticationService {
             });
 
         return stringJoiner.toString();
+    }
+
+    public String generateUserId(String fullName) {
+        String[] nameParts = fullName.split(" ");
+        StringBuilder userIdBuilder = new StringBuilder();
+
+        if (nameParts.length < 2) {
+            // Trường hợp tên không đầy đủ, chỉ trả về tên nguyên gốc
+            return fullName.toLowerCase();
+        }
+
+        for (int i = 0; i < nameParts.length - 1; i++) {
+            userIdBuilder.append(Character.toLowerCase(nameParts[i].charAt(0))); // Chữ cái đầu viết thường
+        }
+
+        userIdBuilder.append("_");
+
+        String lastName = nameParts[nameParts.length - 1];
+        userIdBuilder.append(Character.toLowerCase(lastName.charAt(0))); // Chữ cái đầu của tên cuối cùng viết thường
+
+        String normalizedLastName = Normalizer.normalize(lastName, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", ""); // Xóa các dấu
+        userIdBuilder.append(normalizedLastName.toLowerCase().substring(1)); // Bỏ chữ cái đầu và viết thường phần còn lại của tên cuối cùng
+
+        return userIdBuilder.toString();
     }
 }
