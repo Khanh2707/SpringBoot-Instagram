@@ -114,7 +114,7 @@ public class AuthenticationService {
             User newUser = userRepository.save(User.builder()
                     .idUser(generateUserId(userInfo.getFamilyName() + " " + userInfo.getGivenName()))
                     .avatar(userInfo.getPicture())
-                    .name(userInfo.getFamilyName() + userInfo.getGivenName())
+                    .name(userInfo.getFamilyName() + " " + userInfo.getGivenName())
                     .lastTimeActive(LocalDateTime.now())
                     .stateActive(false)
                     .account(newAccount)
@@ -306,6 +306,15 @@ public class AuthenticationService {
                 .replaceAll("[^\\p{ASCII}]", ""); // Xóa các dấu
         userIdBuilder.append(normalizedLastName.toLowerCase().substring(1)); // Bỏ chữ cái đầu và viết thường phần còn lại của tên cuối cùng
 
-        return userIdBuilder.toString();
+        String baseUserId = userIdBuilder.toString();
+
+        // Check for uniqueness and append number if needed
+        int counter = 1;
+        String uniqueUserId = baseUserId;
+        while (userRepository.existsByIdUser(uniqueUserId)) {
+            uniqueUserId = baseUserId + "_" + counter++;
+        }
+
+        return uniqueUserId;
     }
 }
